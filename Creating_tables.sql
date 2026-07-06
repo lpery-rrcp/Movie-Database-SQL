@@ -3,6 +3,7 @@
 */
 USE Movies;
 
+DROP TABLE IF EXISTS Movie
 CREATE TABLE Movie 
 (
 	movie_id NUMERIC UNIQUE NOT NULL,
@@ -10,6 +11,8 @@ CREATE TABLE Movie
 	movie_rating NUMERIC,
 	release_date DATE,
 	director VARCHAR(25),
+	time_minutes NUMERIC,
+	budget NUMERIC,
 	
 	CONSTRAINT movie_id_unique
 		UNIQUE (movie_id),
