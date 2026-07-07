@@ -3,7 +3,7 @@
 */
 USE Movies;
 
-DROP TABLE IF EXISTS Movie
+
 CREATE TABLE Movie 
 (
 	movie_id NUMERIC UNIQUE NOT NULL,
@@ -35,4 +35,10 @@ CREATE TABLE Show
 		UNIQUE (show_id),
 	CONSTRAINT over_0_show_rating
 		CHECK (show_rating > 0)
+);
+
+CREATE TABLE Genre
+(
+	id NUMERIC UNIQUE NOT NULL,
+	genre_name VARCHAR(25) NOT NULL,
 );
