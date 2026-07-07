@@ -3,7 +3,6 @@
 */
 USE Movies;
 
-
 CREATE TABLE Movie 
 (
 	movie_id NUMERIC UNIQUE NOT NULL,
@@ -57,4 +56,17 @@ CREATE TABLE Creator
 
 /* Mixed table */
 
+SELECT * FROM Movie;
+
+/*for genres??*/
+CREATE TABLE MovieGenre
+(
+	movie_id NUMERIC NOT NULL,
+	genre_id NUMERIC NOT NULL,
+
+	CONSTRAINT fk_movie
+	FOREIGN KEY (movie_id) REFERENCES Movie(movie_id),
+	CONSTRAINT fk_genre
+	FOREIGN KEY (genre_id) REFERENCES Genre(id)
+);
 
