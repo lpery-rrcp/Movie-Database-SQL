@@ -49,3 +49,12 @@ CREATE TABLE Actor
 	actor_name VARCHAR(25) NOT NULL,
 );
 
+CREATE TABLE Creator 
+(
+	id NUMERIC UNIQUE NOT NULL,
+	creator_name VARCHAR(25) NOT NULL,
+);
+
+/* Mixed table */
+
+
