@@ -79,4 +79,13 @@ CREATE TABLE ShowGenre
 	FOREIGN KEY (genre_id) REFERENCES Genre(id)
 );
 
-SELECT * FROM sys.foreign_keys;
+CREATE TABLE MovieActor
+(
+	movie_id NUMERIC NOT NULL,
+	actor_id NUMERIC NOT NULL,
+
+	CONSTRAINT fk_movie_actor_id
+	FOREIGN KEY (movie_id) REFERENCES Movie(movie_id),
+	CONSTRAINT fk_actor_movie_id
+	FOREIGN KEY (actor_id) REFERENCES Actor(id), 
+);
