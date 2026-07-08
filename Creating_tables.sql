@@ -56,8 +56,6 @@ CREATE TABLE Creator
 
 /* Mixed table */
 
-SELECT * FROM Movie;
-
 /*for genres??*/
 CREATE TABLE MovieGenre
 (
@@ -70,3 +68,15 @@ CREATE TABLE MovieGenre
 	FOREIGN KEY (genre_id) REFERENCES Genre(id)
 );
 
+CREATE TABLE ShowGenre
+(
+	show_id NUMERIC NOT NULL,
+	genre_id NUMERIC NOT NULL,
+
+	CONSTRAINT fk_show_genre
+	FOREIGN KEY (show_id) REFERENCES Show(show_id),
+	CONSTRAINT fk_genre_show
+	FOREIGN KEY (genre_id) REFERENCES Genre(id)
+);
+
+SELECT * FROM sys.foreign_keys;
