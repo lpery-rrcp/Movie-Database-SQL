@@ -100,3 +100,14 @@ CREATE TABLE ShowActor
 	CONSTRAINT fk_actorid_ShowActor
 	FOREIGN KEY (actor_id) REFERENCES Actor(id),
 );
+
+CREATE TABLE MovieCreator
+(
+	movie_id NUMERIC NOT NULL,
+	creator_id NUMERIC NOT NULL,
+
+	CONSTRAINT fk_movieid_MovieCreator
+	FOREIGN KEY (movie_id) REFERENCES Movie(movie_id),
+	CONSTRAINT fk_creatorid_MovieCreator
+	FOREIGN KEY (creator_id) REFERENCES Creator(id)
+);
