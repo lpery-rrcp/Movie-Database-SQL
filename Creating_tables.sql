@@ -111,3 +111,14 @@ CREATE TABLE MovieCreator
 	CONSTRAINT fk_creatorid_MovieCreator
 	FOREIGN KEY (creator_id) REFERENCES Creator(id)
 );
+
+CREATE TABLE ShowCreator
+(
+	show_id NUMERIC NOT NULL,
+	creator_id NUMERIC NOT NULL,
+
+	CONSTRAINT fk_showid_ShowCreator
+	FOREIGN KEY (show_id) REFERENCES Show(show_id),
+	CONSTRAINT fk_creatorid_ShowCreator
+	FOREIGN KEY (creator_id) REFERENCES	Creator(id)
+);
