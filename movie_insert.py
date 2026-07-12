@@ -1,5 +1,9 @@
-from multiprocessing import process
+import os
+
+import dotenv
+from dotenv import load_dotenv
 
 import requests
 
-print(f"TMDB_API_KEY: {process.env.TMDB_API_KEY}")
+load_dotenv()
+print(f"TMDB_API_KEY: {os.getenv('TMDB_API_KEY')}")
