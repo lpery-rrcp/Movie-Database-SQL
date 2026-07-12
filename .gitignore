@@ -1,0 +1,6 @@
+# ignored files
+.env
+.env*
+
+# to remove file from compository
+# git rm --cached .env
