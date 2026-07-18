@@ -1,0 +1,2 @@
+ALTER TABLE Movie
+DROP COLUMN creator;
