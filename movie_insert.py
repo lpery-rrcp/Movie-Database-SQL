@@ -18,29 +18,10 @@ movies = response.json()["results"]
 #     print(f"{movie['id']}, {movie['title']}")
 
 conn = pyodbc.connect(
-    "Driver={ODBC Driver 16 for SQL Server};"
-    "Server=localhost;"
-    "Database=Movie;"
+    f"Driver={{{os.getenv('DRIVER_NAME')}}};"
+    f"Server={os.getenv('SERVER_NAME')};"
+    f"Database={os.getenv('DATABASE_NAME')};"
     "Trusted_Connection=yes;"
 )
 
-cursor = conn.cursor()
-
-for movie in movies:
-    movie_id = movie["id"]
-    title = movie["title"]
-    release_date = movie["release_date"]
-    overview = movie["overview"]
-
-    cursor.execute(
-        "SELECT * FROM Movies WHERE MovieID = ?",
-        (movie_id,)
-    )
-    if not cursor.fetchone():
-        cursor.execute(
-            "INSERT INTO Movies (MovieID, Title, ReleaseDate, Overview) VALUES (?, ?, ?, ?)",
-            (movie_id, title, release_date, overview),
-        )
-
-conn.commit()
-cursor.close()
+print(conn)
