@@ -10,7 +10,6 @@ CREATE TABLE Movie
 	movie_rating NUMERIC,
 	release_date DATE,
 	overview VARCHAR(MAX),
-	creator VARCHAR(25),
 	time_minutes NUMERIC,
 	budget NUMERIC,
 	
@@ -121,4 +120,16 @@ CREATE TABLE ShowCreator
 	FOREIGN KEY (show_id) REFERENCES Show(show_id),
 	CONSTRAINT fk_creatorid_ShowCreator
 	FOREIGN KEY (creator_id) REFERENCES	Creator(id)
+);
+
+CREATE TABLE MovieCreatives
+(
+	movie_id NUMERIC NOT NULL,
+	creator_id NUMERIC NOT NULL,
+	job VARCHAR(25),
+
+	CONSTRAINT fk_movieid_MovieCreatives
+	FOREIGN KEY (movie_id) REFERENCES Movie(movie_id),
+	CONSTRAINT fk_creatorid_MovieCreatives
+	FOREIGN KEY (creator_id) REFERENCES Creator(id),
 );
