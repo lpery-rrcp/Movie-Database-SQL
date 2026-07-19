@@ -24,16 +24,26 @@ conn = pyodbc.connect(
     "Trusted_Connection=yes;"
 )
 
-
 cursor = conn.cursor()
 
+
+# Insert tmdb movies to the SQL Server database
 cursor.execute(
     """
     SELECT * FROM Movie;
     """
 )
-print(cursor.fetchall())
 
+# Checks if the table is empty
+# print(cursor.fetchall())
+
+# Check if tmdb_id already exists in the Movie table
+print(response.status_code)
+
+movies = response.json()["results"]
+print(f"Number of movies fetched from TMDB: {len(movies)}")
+
+# Close the cursor and connection
 conn.commit()
 
 cursor.close()
