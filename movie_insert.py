@@ -24,4 +24,16 @@ conn = pyodbc.connect(
     "Trusted_Connection=yes;"
 )
 
-print(conn)
+
+cursor = conn.cursor()
+
+cursor.execute(
+    """
+    SELECT * FROM Movie
+    """
+)
+
+conn.commit()
+
+cursor.close()
+conn.close()
