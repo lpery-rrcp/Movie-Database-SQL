@@ -29,9 +29,10 @@ cursor = conn.cursor()
 
 cursor.execute(
     """
-    SELECT * FROM Movie
+    SELECT * FROM Movie;
     """
 )
+print(cursor.fetchall())
 
 conn.commit()
 
