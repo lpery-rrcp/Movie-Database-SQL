@@ -41,7 +41,7 @@ cursor.execute(
 print(response.status_code)
 
 movies = response.json()["results"]
-print(f"Number of movies fetched from TMDB: {len(movies)}")
+print(f"{(movies[1])}")
 
 # Close the cursor and connection
 conn.commit()
