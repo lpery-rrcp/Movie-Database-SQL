@@ -27,21 +27,44 @@ conn = pyodbc.connect(
 cursor = conn.cursor()
 
 
-# Insert tmdb movies to the SQL Server database
-cursor.execute(
-    """
-    SELECT * FROM Movie;
-    """
-)
-
 # Checks if the table is empty
 # print(cursor.fetchall())
 
 # Check if tmdb_id already exists in the Movie table
-print(response.status_code)
+# print(response.status_code)
 
 movies = response.json()["results"]
-print(f"{(movies[1])}")
+# print(f"{(movies[1])}")
+
+
+# Insert movies into the Movie table
+for movie in movies:
+    movie_id = movie["id"]
+    title = movie["title"]
+    movie_rating = movie["vote_average"]
+    release_date = movie["release_date"]
+    overview = movie["overview"]
+
+    # getting the details of each movie using the movie id
+    details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}"
+    details_response = requests.get(details_url).json()
+    time_minutes = details_response["runtime"]
+    budget = details_response["budget"]
+
+    print(f"Movie ID: {movie_id}, Title: {title}, Rating: {movie_rating}, Release Date: {release_date}, Overview: {overview}, Runtime: {time_minutes} minutes, Budget: ${budget}")
+
+    # count = cursor.fetchone()[0]
+    # if count == 0:
+    #     # Insert the movie into the database
+    #     cursor.execute(
+    #         "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes) VALUES (?, ?, ?, ?, ?, ?);",
+    #         (movie_id, title, movie_rating, release_date,
+    #          overview, time_minutes),
+    #     )
+    #     print(f"Inserted: {title}")
+    # else:
+    #     print(f"Skipped (already exists): {title}")
+
 
 # Close the cursor and connection
 conn.commit()
