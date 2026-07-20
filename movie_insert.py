@@ -59,14 +59,14 @@ for movie in movies:
     if count == 0:
         print(f"Inserting: {title}")
         # Insert the movie into the database
-    #     cursor.execute(
-    #         "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes) VALUES (?, ?, ?, ?, ?, ?);",
-    #         (movie_id, title, movie_rating, release_date,
-    #          overview, time_minutes),
-    #     )
-    #     print(f"Inserted: {title}")
-    # else:
-    #     print(f"Skipped (already exists): {title}")
+        cursor.execute(
+            "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
+            (movie_id, title, movie_rating, release_date,
+             overview, time_minutes, budget),
+        )
+        print(f"Inserted: {title}")
+    else:
+        print(f"Skipped (already exists): {title}")
 
 
 # Close the cursor and connection
