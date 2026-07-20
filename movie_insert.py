@@ -51,11 +51,14 @@ for movie in movies:
     time_minutes = details_response["runtime"]
     budget = details_response["budget"]
 
-    print(f"Movie ID: {movie_id}, Title: {title}, Rating: {movie_rating}, Release Date: {release_date}, Overview: {overview}, Runtime: {time_minutes} minutes, Budget: ${budget}")
-
-    # count = cursor.fetchone()[0]
-    # if count == 0:
-    #     # Insert the movie into the database
+    # Check if the movie already exists in the database
+    cursor.execute(
+        "SELECT COUNT(*) FROM Movie WHERE movie_id = ?;", (movie_id,)
+    )
+    count = cursor.fetchone()[0]
+    if count == 0:
+        print(f"Inserting: {title}")
+        # Insert the movie into the database
     #     cursor.execute(
     #         "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes) VALUES (?, ?, ?, ?, ?, ?);",
     #         (movie_id, title, movie_rating, release_date,
