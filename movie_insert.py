@@ -9,9 +9,10 @@ import requests
 load_dotenv()
 API_KEY = os.getenv("TMDB_API_KEY")
 
-URL = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
+BASE_URL = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
 
-response = requests.get(URL)
+
+response = requests.get(BASE_URL)
 movies = response.json()["results"]
 
 # for movie in movies:
@@ -26,15 +27,12 @@ conn = pyodbc.connect(
 
 cursor = conn.cursor()
 
-
-# Checks if the table is empty
-# print(cursor.fetchall())
-
-# Check if tmdb_id already exists in the Movie table
-# print(response.status_code)
-
 movies = response.json()["results"]
-# print(f"{(movies[1])}")
+
+
+def show_movies():
+    for movie in movies:
+        print(f"{movie['id']}, {movie['title']}")
 
 
 def create_movie_table():
@@ -70,7 +68,8 @@ def create_movie_table():
             print(f"Skipped (already exists): {title}")
 
 
-create_movie_table()
+# create_movie_table()
+show_movies()
 # Close the cursor and connection
 conn.commit()
 
