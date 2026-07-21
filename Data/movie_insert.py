@@ -35,7 +35,7 @@ def show_movies():
         print(f"{movie['id']}, {movie['title']}")
 
 
-def create_movie_table():
+def insert_movie_table():
     # Insert movies into the Movie table
     for movie in movies:
         movie_id = movie["id"]
@@ -68,8 +68,8 @@ def create_movie_table():
             print(f"Skipped (already exists): {title}")
 
 
-# create_movie_table()
-show_movies()
+insert_movie_table()
+# show_movies()
 # Close the cursor and connection
 conn.commit()
 
