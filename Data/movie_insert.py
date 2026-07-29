@@ -35,7 +35,10 @@ def show_movies():
         print(f"{movie['id']}, {movie['title']}")
 
 
-def insert_movie_table():
+def insert_popular_movie_table():
+    URL = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
+    response = requests.get(URL)
+    movies = response.json()["results"]
     # Insert movies into the Movie table
     for movie in movies:
         movie_id = movie["id"]
@@ -68,7 +71,7 @@ def insert_movie_table():
             print(f"Skipped (already exists): {title}")
 
 
-insert_movie_table()
+insert_popular_movie_table()
 # show_movies()
 # Close the cursor and connection
 conn.commit()
