@@ -20,6 +20,15 @@ conn = pyodbc.connect(
 cursor = conn.cursor()
 
 
+def show_genres():
+    URL = f"{BASE_URL}/genre/movie/list?api_key={API_KEY}"
+    response = requests.get(URL)
+    genres = response.json()["genres"]
+
+    for genre in genres:
+        print(f"- {genre['name']} (ID: {genre['id']})")
+
+
 def insert_genre_table():
     URL = f"{BASE_URL}/genre/movie/list?api_key={API_KEY}"
     response = requests.get(URL)
@@ -40,7 +49,9 @@ def insert_genre_table():
     #     )
 
 
-insert_genre_table()
+# Fucntion calls
+show_genres()
+# insert_genre_table()
 
 # Close the cursor and connection
 conn.commit()
