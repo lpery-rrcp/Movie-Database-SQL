@@ -9,14 +9,13 @@ import requests
 load_dotenv()
 API_KEY = os.getenv("TMDB_API_KEY")
 
-BASE_URL = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
+BASE_URL = f"https://api.themoviedb.org/3"
+URL = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
 
 
-response = requests.get(BASE_URL)
+response = requests.get(BASE_URL + "/movie/popular",
+                        params={"api_key": API_KEY})
 movies = response.json()["results"]
-
-# for movie in movies:
-#     print(f"{movie['id']}, {movie['title']}")
 
 conn = pyodbc.connect(
     f"Driver={{{os.getenv('DRIVER_NAME')}}};"
@@ -70,9 +69,10 @@ def insert_popular_movie_table():
         else:
             print(f"Skipped (already exists): {title}")
 
-
-insert_popular_movie_table()
+# insert_popular_movie_table()
 # show_movies()
+
+
 # Close the cursor and connection
 conn.commit()
 
