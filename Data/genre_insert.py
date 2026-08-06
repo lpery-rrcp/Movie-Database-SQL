@@ -34,24 +34,19 @@ def insert_genre_table():
     response = requests.get(URL)
     genres = response.json()["genres"]
 
-    # Show the genres retrieved from the API
-    print("Genres retrieved from the API:")
     for genre in genres:
-        print(f"- {genre['name']} (ID: {genre['id']})")
+        genre_id = genre["id"]
+        genre_name = genre["name"]
 
-    # for genre in genres:
-    #     genre_id = genre["id"]
-    #     genre_name = genre["name"]
-
-    #     cursor.execute(
-    #         "INSERT INTO Genre (genre_id, genre_name) VALUES (?, ?);",
-    #         (genre_id, genre_name)
-    #     )
+        cursor.execute(
+            "INSERT INTO Genre (id, genre_name) VALUES (?, ?);",
+            (genre_id, genre_name)
+        )
 
 
 # Fucntion calls
-show_genres()
-# insert_genre_table()
+# show_genres()
+insert_genre_table()
 
 # Close the cursor and connection
 conn.commit()
