@@ -20,34 +20,43 @@ conn = pyodbc.connect(
 cursor = conn.cursor()
 
 
-def show_creators():
+def show_actors():
     URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
     response = requests.get(URL)
-    creators = response.json()["results"]
+    actors = response.json()["results"]
 
-    for creator in creators:
-        print(f"- {creator['name']} (ID: {creator['id']})")
+    for actor in actors:
+        print(f"- {actor['name']} (ID: {actor['id']})")
 
 
-def insert_creator_table():
+def insert_actors_table():
     URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
     response = requests.get(URL)
-    creators = response.json()["results"]
+    actors = response.json()["results"]
 
-    for creator in creators:
-        creator_id = creator["id"]
-        creator_name = creator["name"]
+    for actor in actors:
+        actor_id = actor["id"]
+        actor_name = actor["name"]
 
+        # Check if the actor already exists in the database
         cursor.execute(
-            "INSERT INTO Creator (id, creator_name) VALUES (?, ?);",
-            (creator_id, creator_name)
+            "SELECT COUNT(*) FROM Actor WHERE id = ?;", (actor_id,)
         )
-        print(f"Inserting: {creator_name} (ID: {creator_id})")
+        count = cursor.fetchone()[0]
+        if count == 0:
+            cursor.execute(
+                "INSERT INTO Actor (id, actor_name) VALUES (?, ?);",
+                (actor_id, actor_name)
+            )
+            print(f"Inserting: {actor_name} (ID: {actor_id})")
+        else:
+            print(f"Skipped (already exists): {actor_name} (ID: {actor_id})")
+            continue
 
 
 # Test functions
-show_creators()
-# insert_creator_table()
+# show_actors()
+insert_actors_table()
 
 # Close the cursor and connection
 conn.commit()
