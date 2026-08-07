@@ -29,7 +29,25 @@ def show_creators():
         print(f"- {creator['name']} (ID: {creator['id']})")
 
 
+def insert_creator_table():
+    URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
+    response = requests.get(URL)
+    creators = response.json()["results"]
+
+    for creator in creators:
+        creator_id = creator["id"]
+        creator_name = creator["name"]
+
+        cursor.execute(
+            "INSERT INTO Creator (id, creator_name) VALUES (?, ?);",
+            (creator_id, creator_name)
+        )
+        print(f"Inserting: {creator_name} (ID: {creator_id})")
+
+
+# Test functions
 show_creators()
+# insert_creator_table()
 
 # Close the cursor and connection
 conn.commit()
