@@ -1,10 +1,16 @@
+
+/*Drop the table to remove the creator column*/
 ALTER TABLE Movie
 DROP COLUMN creator;
 
+/*Added the budget to the Movie */
 ALTER TABLE Movie
 ADD budget	DECIMAL(12, 2);
 
+/*Changes title Varchar and maximize it to 255*/
 ALTER TABLE Movie
 ALTER COLUMN title VARCHAR(255) NOT NULL;
 
-SELECT * FROM Movie;
+/*Change show_name to title*/
+ALTER TABLE Show
+ALTER COLUMN title VARCHAR(255) NOT NULL;
