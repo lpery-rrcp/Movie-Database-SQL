@@ -14,3 +14,7 @@ ALTER COLUMN title VARCHAR(255) NOT NULL;
 /*Change show_name to title*/
 ALTER TABLE Show
 ALTER COLUMN title VARCHAR(255) NOT NULL;
+
+/*Change the overview varchar to max*/
+ALTER TABLE Show
+ALTER COLUMN overview VARCHAR(MAX);
