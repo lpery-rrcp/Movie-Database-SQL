@@ -18,3 +18,7 @@ ALTER COLUMN title VARCHAR(255) NOT NULL;
 /*Change the overview varchar to max*/
 ALTER TABLE Show
 ALTER COLUMN overview VARCHAR(MAX);
+
+/*Added the total_episodes to the Shows table*/
+ALTER TABLE Show
+ADD total_episodes NUMERIC(18, 0)
