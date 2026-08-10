@@ -38,6 +38,7 @@ def insert_popular_movie_table():
     URL = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
     response = requests.get(URL)
     movies = response.json()["results"]
+
     # Insert movies into the Movie table
     for movie in movies:
         movie_id = movie["id"]
