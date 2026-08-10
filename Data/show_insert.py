@@ -27,7 +27,7 @@ def show_shows():
 
     for show in shows:
         print(
-            f"- {show['name']} (ID: {show['id']}) (Rating: {show['vote_average']}, Release Date: {show['first_air_date']})")
+            f"- {show['name']} (ID: {show['id']}) ")
 
 
 def insert_shows_table():
@@ -71,8 +71,8 @@ def insert_shows_table():
 
 
 # Function calls
-show_shows()
-# insert_shows_table()
+# show_shows()
+insert_shows_table()
 # Close the cursor and connection
 conn.commit()
 
