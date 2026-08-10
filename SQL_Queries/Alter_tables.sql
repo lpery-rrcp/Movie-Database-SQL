@@ -22,3 +22,10 @@ ALTER COLUMN overview VARCHAR(MAX);
 /*Added the total_episodes to the Shows table*/
 ALTER TABLE Show
 ADD total_episodes NUMERIC(18, 0)
+
+/*Alter show rating to be be equal or greater than 0*/
+ALTER TABLE Show
+DROP CONSTRAINT over_0_show_rating;
+
+ALTER TABLE Show 
+ADD CONSTRAINT Show_rating_greaterOrEqual_0 CHECK (show_rating >= 0)
