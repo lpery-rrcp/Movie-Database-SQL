@@ -50,9 +50,41 @@ def show_people():
             f"- {title} (ID: {movie_id}) (Director: {director}, Writer: {writer}, Producer: {producer})")
 
 
-# Function testing
-show_people()
+def insert_people_movie():
+    # insert the director, writer, and producer of the movie using the movie id. I will use the credits endpoint of the TMDB API to get this information. The credits endpoint provides information about the cast and crew of a movie, including the director, writer, and producer.
+    URL = f"{BASE_URL}/movie/popular?api_key={API_KEY}"
+    response = requests.get(URL)
+    movies = response.json()["results"]
 
+    for movie in movies:
+        movie_id = movie["id"]
+        URL = f"{BASE_URL}/movie/{movie_id}/credits?api_key={API_KEY}"
+        response = requests.get(URL)
+        credits = response.json()
+
+        director = None
+        writer = None
+        producer = None
+
+        for crew_member in credits["crew"]:
+            if crew_member["job"] == "Director":
+                director = crew_member["name"]
+            elif crew_member["job"] == "Writer":
+                writer = crew_member["name"]
+            elif crew_member["job"] == "Producer":
+                producer = crew_member["name"]
+
+        print(
+            f"- {movie['title']} (ID: {movie_id}) (Director: {director}, Writer: {writer}, Producer: {producer})")
+        # cursor.execute(
+        #     "INSERT INTO Creatives (id, creative_name, creative_job) VALUES (?, ?, ?)",
+        #     (creatives_id, creative_name, job),
+        # )
+
+
+# Function testing
+# show_people()
+insert_people_movie()
 # close the cursor and connection
 conn.commit()
 cursor.close()

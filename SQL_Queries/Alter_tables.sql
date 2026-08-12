@@ -32,4 +32,8 @@ ADD CONSTRAINT Show_rating_greaterOrEqual_0 CHECK (show_rating >= 0)
 
 /*Add creative job to the Creatives table.*/
 ALTER TABLE Creatives
-ADD creative_job VARCHAR(255);
+ADD creatives_job VARCHAR(255);
+
+/*Make the id the primary key*/
+ALTER TABLE Creatives
+ADD PRIMARY KEY (id);
