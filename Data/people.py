@@ -78,7 +78,7 @@ def insert_people_movie():
 
                 if count == 0:
                     cursor.execute(
-                        "INSERT INTO Creatives (id, creative_name, creative_job) VALUES (?, ?, ?)",
+                        "INSERT INTO Creatives (id, creatives_name, creatives_job) VALUES (?, ?, ?)",
                         (creative_id, creative_name, job),
                     )
                     print(
@@ -91,7 +91,7 @@ def insert_people_movie():
 
 # Function testing
 # show_people()
-# insert_people_movie()
+insert_people_movie()
 # close the cursor and connection
 conn.commit()
 cursor.close()
