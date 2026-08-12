@@ -62,29 +62,36 @@ def insert_people_movie():
         response = requests.get(URL)
         credits = response.json()
 
-        director = None
-        writer = None
-        producer = None
-
         for crew_member in credits["crew"]:
-            if crew_member["job"] == "Director":
-                director = crew_member["name"]
-            elif crew_member["job"] == "Writer":
-                writer = crew_member["name"]
-            elif crew_member["job"] == "Producer":
-                producer = crew_member["name"]
+            job = crew_member["job"]
 
-        print(
-            f"- {movie['title']} (ID: {movie_id}) (Director: {director}, Writer: {writer}, Producer: {producer})")
-        # cursor.execute(
-        #     "INSERT INTO Creatives (id, creative_name, creative_job) VALUES (?, ?, ?)",
-        #     (creatives_id, creative_name, job),
-        # )
+            if job in ["Director", "Writer", "Producer"]:
+                creative_id = crew_member["id"]
+                creative_name = crew_member["name"]
+                creatives_id = crew_member["id"]
+
+                # Check if the creative already exists in the database
+                cursor.execute(
+                    "SELECT COUNT(*) FROM Creatives WHERE id = ?;", (creative_id,)
+                )
+                count = cursor.fetchone()[0]
+
+                if count == 0:
+                    cursor.execute(
+                        "INSERT INTO Creatives (id, creative_name, creative_job) VALUES (?, ?, ?)",
+                        (creative_id, creative_name, job),
+                    )
+                    print(
+                        f"Inserting: {creative_name} (ID: {creatives_id}, Job: {job})")
+                else:
+                    print(
+                        f"Skipped (already exists): {creative_name} (ID: {creative_id}, Job: {job})")
+                    continue
 
 
 # Function testing
 # show_people()
-insert_people_movie()
+# insert_people_movie()
 # close the cursor and connection
 conn.commit()
 cursor.close()

@@ -37,3 +37,7 @@ ADD creatives_job VARCHAR(255);
 /*Make the id the primary key*/
 ALTER TABLE Creatives
 ADD PRIMARY KEY (id);
+
+/*Change the maximum of creatives_name from Creatives to 255*/
+ALTER TABLE Creatives
+ALTER COLUMN creatives_name VARCHAR(255) NOT NULL;
