@@ -89,9 +89,49 @@ def insert_people_movie():
                     continue
 
 
+def insert_people_show():
+    # insert the director, writer, and producer of the show using the show id. I will use the credits endpoint of the TMDB API to get this information. The credits endpoint provides information about the cast and crew of a show, including the director, writer, and producer.
+    URL = f"{BASE_URL}/tv/popular?api_key={API_KEY}"
+    response = requests.get(URL)
+    shows = response.json()["results"]
+
+    for show in shows:
+        show_id = show["id"]
+        URL = f"{BASE_URL}/tv/{show_id}/credits?api_key={API_KEY}"
+        response = requests.get(URL)
+        credits = response.json()
+
+        for crew_member in credits["crew"]:
+            job = crew_member["job"]
+
+            if job in ["Director", "Writer", "Producer"]:
+                creative_id = crew_member["id"]
+                creative_name = crew_member["name"]
+                creatives_id = crew_member["id"]
+
+                # Check if the creative already exists in the database
+                cursor.execute(
+                    "SELECT COUNT(*) FROM Creatives WHERE id = ?;", (creative_id,)
+                )
+                count = cursor.fetchone()[0]
+
+                if count == 0:
+                    cursor.execute(
+                        "INSERT INTO Creatives (id, creatives_name, creatives_job) VALUES (?, ?, ?)",
+                        (creative_id, creative_name, job),
+                    )
+                    print(
+                        f"Inserting: {creative_name} (ID: {creatives_id}, Job: {job})")
+                else:
+                    print(
+                        f"Skipped (already exists): {creative_name} (ID: {creative_id}, Job: {job})")
+                    continue
+
+
 # Function testing
 # show_people()
-insert_people_movie()
+# insert_people_movie()
+insert_people_show()
 # close the cursor and connection
 conn.commit()
 cursor.close()
