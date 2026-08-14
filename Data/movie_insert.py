@@ -52,6 +52,7 @@ def insert_popular_movie_table():
         details_response = requests.get(details_url).json()
         time_minutes = details_response["runtime"]
         budget = details_response["budget"]
+        genre_name = details_response["genres"][0]["name"] if details_response["genres"] else None
 
         # Check if the movie already exists in the database
         cursor.execute(
@@ -70,7 +71,17 @@ def insert_popular_movie_table():
         else:
             print(f"Skipped (already exists): {title}")
 
-# insert_popular_movie_table()
+        # Adds the genres of the movie into the Movie_Genre table
+        for genre in movie["genre_ids"]:
+            # cursor.execute(
+            #     "INSERT INTO Movie_Genre (movie_id, genre_id) VALUES (?, ?);",
+            #     (movie_id, genre),
+            # )
+            print(
+                f"Inserted genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
+
+
+insert_popular_movie_table()
 # show_movies()
 
 
