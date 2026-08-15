@@ -42,4 +42,20 @@ ADD PRIMARY KEY (id);
 ALTER TABLE Creatives
 ALTER COLUMN creatives_name VARCHAR(255) NOT NULL;
 
-SELECT * FROM Creatives;
+/*Changed the constraint "over_0_movie_rating from the Movie_genre table*/
+SELECT 
+    cc.name AS constraint_name,
+    cc.definition
+FROM sys.check_constraints cc
+WHERE cc.name = 'greater_or_0_movie_rating';
+
+ALTER TABLE Movie
+DROP CONSTRAINT over_0_movie_rating;
+
+ALTER TABLE Movie 
+ADD CONSTRAINT greater_or_0_movie_rating CHECK (movie_rating >= 0);
+
+/*Adding column row to tables MovieActor and ShowActor*/
+ALTER TABLE MovieActor
+ADD roles VARCHAR(255);
+

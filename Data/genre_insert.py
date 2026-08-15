@@ -38,7 +38,7 @@ def insert_genre_movie():
         genre_id = genre["id"]
         genre_name = genre["name"]
 
-        # Check if the genre already exists in the database
+        # Check if the genre into the Genre table already exists in the database
         cursor.execute(
             "SELECT COUNT(*) FROM Genre WHERE id = ?;", (genre_id,)
         )
@@ -62,7 +62,7 @@ def insert_genre_show():
         genre_id = genre["id"]
         genre_name = genre["name"]
 
-        # Check if the genre already exists in the database
+        # Check if the genre into the Genre table already exists in the database
         cursor.execute(
             "SELECT COUNT(*) FROM Genre WHERE id = ?;", (genre_id,)
         )

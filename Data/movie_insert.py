@@ -77,23 +77,24 @@ def insert_popular_movie_table():
             cursor.execute(
                 "SELECT COUNT(*) FROM MovieGenre WHERE movie_id = ?;", (movie_id,)
             )
-            print(cursor.fetchone()[0])
-            # count = cursor.execute(
-            #     "SELECT COUNT(*) FROM MovieGenre WHERE movie_id = ? AND genre_id = ?;", (movie_id, genre)
-            # ).fetchone()[0]
-            # if count == 0:
-            #     cursor.execute(
-            #         "INSERT INTO Movie_Genre (movie_id, genre_id) VALUES (?, ?);",
-            #         (movie_id, genre),
-            #     )
-            #     print(
-            #         f"Inserted genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
-            # else:
-            #     print(
-            #         f"Skipped (already exists): genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
+
+            count = cursor.execute(
+                "SELECT COUNT(*) FROM MovieGenre WHERE movie_id = ? AND genre_id = ?;", (movie_id, genre)
+            ).fetchone()[0]
+
+            if count == 0:
+                cursor.execute(
+                    "INSERT INTO MovieGenre (movie_id, genre_id) VALUES (?, ?);",
+                    (movie_id, genre),
+                )
+                print(
+                    f"Inserted genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
+            else:
+                print(
+                    f"Skipped (already exists): genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
 
 
-insert_popular_movie_table()
+# insert_popular_movie_table()
 # show_movies()
 
 
