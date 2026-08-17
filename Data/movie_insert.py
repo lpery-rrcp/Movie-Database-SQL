@@ -96,7 +96,55 @@ def insert_popular_movie_table():
                     f"Skipped (already exists): genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
 
 
-insert_popular_movie_table()
+def insert_MovieActor():
+    URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
+    response = requests.get(URL)
+    actors = response.json()["results"]
+
+    for actor in actors:
+        actor_id = actor["id"]
+        # Add the data into the MovieActor table
+        movie_url = f"{BASE_URL}/person/{actor_id}/movie_credits?api_key={API_KEY}"
+        movie_response = requests.get(movie_url)
+        movie_credits = movie_response.json().get("cast", [])
+
+        for movie in movie_credits:
+            movie_id = movie["id"]
+            roles = ", ".join([credit["character"]
+                               for credit in movie_credits if credit["id"] == movie_id])
+            # Check if movie_id exists in the Movie table
+            print(
+                f"Checking if movie ID {movie_id} exists in the Movie table for actor ID {actor_id}")
+            cursor.execute(
+                "SELECT COUNT(*) FROM Movie WHERE movie_id = ?;", (movie_id,)
+            )
+            if cursor.fetchone()[0] == 0:
+                cursor.execute(
+                    "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
+                    (movie_id, movie["title"], movie["vote_average"], movie["release_date"],
+                        movie["overview"], movie["runtime"], movie["budget"])
+                )
+                print(f"Inserted movie: {movie['title']} (ID: {movie_id})")
+
+            # check if the movie-actor relationship already exists in the database
+            cursor.execute(
+                "SELECT COUNT(*) FROM MovieActor WHERE movie_id = ? AND actor_id = ?;",
+                (movie_id, actor_id)
+            )
+
+            if cursor.fetchone()[0] == 0:
+                # Insert the movie-actor relationship into the database
+                cursor.execute(
+                    "INSERT INTO MovieActor (movie_id, actor_id, roles) VALUES (?, ?, ?);",
+                    (movie_id, actor_id, roles)
+                )
+                print(
+                    f"Inserted into MovieActor: Movie ID {movie_id}, Actor ID {actor_id}, Roles: {roles}")
+            else:
+                print(
+                    f"Skipped (already exists in MovieActor): Movie ID {movie_id}, Actor ID {actor_id}, Roles: {roles}")
+
+# insert_popular_movie_table()
 # show_movies()
 
 
