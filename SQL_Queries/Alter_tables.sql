@@ -61,3 +61,4 @@ ADD roles VARCHAR(255);
 
 ALTER TABLE ShowActor
 ADD roles VARCHAR(255);
+

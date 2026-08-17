@@ -54,9 +54,35 @@ def insert_actors_table():
             continue
 
 
+def insert_MovieActor():
+    URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
+    response = requests.get(URL)
+    actors = response.json()["results"]
+
+    for actor in actors:
+        actor_id = actor["id"]
+        # Add the data into the MovieActor table
+        movie_url = f"{BASE_URL}/person/{actor_id}/movie_credits?api_key={API_KEY}"
+        movie_response = requests.get(movie_url)
+        movie_credits = movie_response.json().get("cast", [])
+
+    for movie in movie_credits:
+        movie_id = movie["id"]
+        roles = ", ".join([credit["character"]
+                          for credit in movie_credits if credit["id"] == movie_id])
+
+        # cursor.execute(
+        #     "INSERT INTO MovieActor (movie_id, actor_id, roles) VALUES (?, ?, ?);",
+        #     (movie_id, actor_id, roles)
+        # )
+        print(
+            f"Inserted into MovieActor: Movie ID {movie_id}, Actor ID {actor_id}, Roles: {roles}")
+
+
 # Test functions
 # show_actors()
-insert_actors_table()
+# insert_actors_table()
+insert_MovieActor()
 
 # Close the cursor and connection
 conn.commit()

@@ -59,6 +59,7 @@ def insert_popular_movie_table():
             "SELECT COUNT(*) FROM Movie WHERE movie_id = ?;", (movie_id,)
         )
         count = cursor.fetchone()[0]
+
         if count == 0:
             print(f"Inserting: {title}")
             # Insert the movie into the database
@@ -73,7 +74,8 @@ def insert_popular_movie_table():
 
         # Adds the genres of the movie into the Movie_Genre table
         for genre in movie["genre_ids"]:
-
+            print(
+                f"Adding genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
             cursor.execute(
                 "SELECT COUNT(*) FROM MovieGenre WHERE movie_id = ?;", (movie_id,)
             )
@@ -94,7 +96,7 @@ def insert_popular_movie_table():
                     f"Skipped (already exists): genre ID {genre} and genre name {genre_name} for movie ID {movie_id}")
 
 
-# insert_popular_movie_table()
+insert_popular_movie_table()
 # show_movies()
 
 
