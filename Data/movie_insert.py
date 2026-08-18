@@ -100,33 +100,74 @@ def insert_MovieActor():
     URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
     response = requests.get(URL)
     actors = response.json()["results"]
+    print("Start")
 
     for actor in actors:
         actor_id = actor["id"]
+
         # Add the data into the MovieActor table
         movie_url = f"{BASE_URL}/person/{actor_id}/movie_credits?api_key={API_KEY}"
         movie_response = requests.get(movie_url)
         movie_credits = movie_response.json().get("cast", [])
 
+        counter = 0
+
         for movie in movie_credits:
             movie_id = movie["id"]
-            roles = ", ".join([credit["character"]
-                               for credit in movie_credits if credit["id"] == movie_id])
+            title = movie["title"]
+            movie_rating = movie["vote_average"]
+            release_date = movie["release_date"]
+            overview = movie["overview"]
+            roles = movie.get("character", "")
+
             # Check if movie_id exists in the Movie table
             print(
                 f"Checking if movie ID {movie_id} exists in the Movie table for actor ID {actor_id}")
+
             cursor.execute(
                 "SELECT COUNT(*) FROM Movie WHERE movie_id = ?;", (movie_id,)
             )
-            if cursor.fetchone()[0] == 0:
+            movie_exists = cursor.fetchone()[0] > 0
+
+            if movie_exists == 0:
+                # the movie does not exist in the Movie table, so insert it
+
+                # getting the details of each movie using the movie id
+                details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}"
+                details_response = requests.get(details_url).json()
+                time_minutes = details_response["runtime"]
+                budget = details_response["budget"]
+
+                # Insert the movie into the Movie table
                 cursor.execute(
                     "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
-                    (movie_id, movie["title"], movie["vote_average"], movie["release_date"],
-                        movie["overview"], movie["runtime"], movie["budget"])
+                    (movie_id, title, movie_rating, release_date,
+                     overview, time_minutes, budget)
                 )
                 print(f"Inserted movie: {movie['title']} (ID: {movie_id})")
+            else:
+                print(
+                    f"Movie ID {movie_id} already exists in the Movie table.")
 
-            # check if the movie-actor relationship already exists in the database
+            # Check if the actor exists in the Actor table
+            cursor.execute(
+                "SELECT COUNT(*) FROM Actor WHERE id = ?;", (actor_id,)
+            )
+            actor_exists = cursor.fetchone()[0] > 0
+
+            if not actor_exists:
+                # Insert the actor into the Actor table
+                cursor.execute(
+                    "INSERT INTO Actor (id, actor_name) VALUES (?, ?);",
+                    (actor_id, actor["name"])
+                )
+                print(
+                    f"Inserted actor: {actor['name']} (ID: {actor_id})")
+            else:
+                print(
+                    f"Actor ID {actor_id} already exists in the Actor table.")
+
+            # # check if the movie-actor relationship already exists in the database
             cursor.execute(
                 "SELECT COUNT(*) FROM MovieActor WHERE movie_id = ? AND actor_id = ?;",
                 (movie_id, actor_id)
@@ -144,8 +185,19 @@ def insert_MovieActor():
                 print(
                     f"Skipped (already exists in MovieActor): Movie ID {movie_id}, Actor ID {actor_id}, Roles: {roles}")
 
+            # Count movies processed for this actor
+            counter += 1
+
+            if counter >= 2:
+                print(
+                    f"Reached 2 movies for actor {actor_id}"
+                )
+                break
+
+
 # insert_popular_movie_table()
 # show_movies()
+insert_MovieActor()
 
 
 # Close the cursor and connection

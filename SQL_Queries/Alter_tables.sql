@@ -62,3 +62,6 @@ ADD roles VARCHAR(255);
 ALTER TABLE ShowActor
 ADD roles VARCHAR(255);
 
+SELECT * FROM Movie;
+SELECT * FROM MovieActor;
+SELECT * FROM MovieCreatives;
