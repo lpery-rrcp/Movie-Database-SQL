@@ -89,6 +89,25 @@ def insert_people_movie():
                     continue
 
 
+def insert_MovieCreatives():
+    # Add the data into the MovieCreatives table
+    URL = f"{BASE_URL}/movie/popular?api_key={API_KEY}"
+    response = requests.get(URL)
+    movies = response.json()["results"]
+
+    for movie in movies:
+        movie_id = movie["id"]
+        URL = f"{BASE_URL}/movie/{movie_id}/credits?api_key={API_KEY}"
+        response = requests.get(URL)
+        credits = response.json()
+        print(f"Processing movie ID: {movie_id}")
+        print(f"Creatives: {credits['crew']}")
+
+    # Check if the movie exists in the Movie table
+
+    # Check if the creative exists in the Creative table
+
+
 def insert_people_show():
     # insert the director, writer, and producer of the show using the show id. I will use the credits endpoint of the TMDB API to get this information. The credits endpoint provides information about the cast and crew of a show, including the director, writer, and producer.
     URL = f"{BASE_URL}/tv/popular?api_key={API_KEY}"
@@ -131,7 +150,9 @@ def insert_people_show():
 # Function testing
 # show_people()
 # insert_people_movie()
-insert_people_show()
+# insert_people_show()
+insert_MovieCreatives()
+
 # close the cursor and connection
 conn.commit()
 cursor.close()
