@@ -62,6 +62,9 @@ ADD roles VARCHAR(255);
 ALTER TABLE ShowActor
 ADD roles VARCHAR(255);
 
+/*Remove the MovieCreator table*/
+DROP TABLE MovieCreator;
+
 SELECT * FROM Movie;
 SELECT * FROM MovieActor;
 SELECT * FROM MovieCreatives;
