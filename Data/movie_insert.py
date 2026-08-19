@@ -197,7 +197,7 @@ def insert_MovieActor():
 
 # insert_popular_movie_table()
 # show_movies()
-insert_MovieActor()
+# insert_MovieActor()
 
 
 # Close the cursor and connection

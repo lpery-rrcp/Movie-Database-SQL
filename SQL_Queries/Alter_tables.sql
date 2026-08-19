@@ -68,3 +68,4 @@ DROP TABLE MovieCreator;
 SELECT * FROM Movie;
 SELECT * FROM MovieActor;
 SELECT * FROM MovieCreatives;
+SELECT * FROM Creatives;
