@@ -97,15 +97,43 @@ def insert_MovieCreatives():
 
     for movie in movies:
         movie_id = movie["id"]
+        movie_title = movie["title"]
+        movie_rating = movie.get("vote_average")
+        release_date = movie.get("release_date")
+        movie_overview = movie.get("overview")
+        # details
+        movie_details_url = f"{BASE_URL}/movie/{movie_id}?api_key={API_KEY}"
+        movie_details_response = requests.get(movie_details_url)
+        movie_time = movie_details_response.json().get("runtime")
+        movie_budget = movie_details_response.json().get("budget")
+
         URL = f"{BASE_URL}/movie/{movie_id}/credits?api_key={API_KEY}"
         response = requests.get(URL)
         credits = response.json()
         print(f"Processing movie ID: {movie_id}")
         print(f"Creatives: {credits['crew']}")
 
-    # Check if the movie exists in the Movie table
+        # Check if the movie exists in the Movie table
+        movie_count = cursor.execute(
+            "SELECT COUNT(*) FROM Movie WHERE movie_id = ?;", (movie_id,)
+        ).fetchone()[0]
 
-    # Check if the creative exists in the Creative table
+        if movie_count == 0:
+            print(
+                f"Movie ID {movie_id} does not exist in the Movie table. Skipping.")
+            # Add the movie to the Movie table before adding creatives
+            cursor.execute(
+                "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
+                (movie_id, movie_title, movie_rating, release_date,
+                 movie_overview, movie_time, movie_budget)
+            )
+            print(f"Inserted movie ID {movie_id} into the Movie table.")
+            continue
+        else:
+            print(
+                f"Movie ID {movie_id} exists in the Movie table. Proceeding to insert creatives.")
+
+        # Check if the creative exists in the Creative table
 
 
 def insert_people_show():
