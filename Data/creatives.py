@@ -134,6 +134,42 @@ def insert_MovieCreatives():
                 f"Movie ID {movie_id} exists in the Movie table. Proceeding to insert creatives.")
 
         # Check if the creative exists in the Creative table
+        for crew_member in credits["crew"]:
+            job = crew_member["job"]
+
+            if job in ["Director", "Writer", "Producer"]:
+                creative_id = crew_member["id"]
+                creative_name = crew_member["name"]
+
+                cursor.execute(
+                    "SELECT COUNT(*) FROM Creatives WHERE id = ?;", (creative_id,)
+                )
+                count = cursor.fetchone()[0]
+
+                if count == 0:
+                    print(
+                        f"Creative ID {creative_id} does not exist in the Creatives table. Skipping.")
+                    continue
+
+                # Check if the movie-creative relationship already exists
+                cursor.execute(
+                    "SELECT COUNT(*) FROM MovieCreatives WHERE movie_id = ? AND creative_id = ?;",
+                    (movie_id, creative_id),
+                )
+                count = cursor.fetchone()[0]
+
+                if count == 0:
+                    cursor.execute(
+                        "INSERT INTO MovieCreatives (movie_id, creative_id) VALUES (?, ?);",
+                        (movie_id, creative_id),
+                    )
+                    print(
+                        f"Inserted movie ID {movie_id} and creative ID {creative_id} into the MovieCreatives table.")
+                else:
+                    print(
+                        f"Skipped (already exists): movie ID {movie_id} and creative ID {creative_id} in the MovieCreatives table.")
+
+        # Adding the relationship between the movie and the creatives in the MovieCreatives table
 
 
 def insert_people_show():
