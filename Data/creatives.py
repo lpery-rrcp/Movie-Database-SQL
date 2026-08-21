@@ -169,12 +169,6 @@ def insert_MovieCreatives():
                     print(
                         f"Skipped (already exists): movie ID {movie_id} and creative ID {creative_id} in the MovieCreatives table.")
 
-            # Adding the relationship between the movie and the creatives in the MovieCreatives table
-            cursor.execute(
-                "INSERT INTO MovieCreatives (movie_id, creative_id) VALUES (?, ?);",
-                (movie_id, creative_id)
-            )
-
 
 def insert_people_show():
     # insert the director, writer, and producer of the show using the show id. I will use the credits endpoint of the TMDB API to get this information. The credits endpoint provides information about the cast and crew of a show, including the director, writer, and producer.
