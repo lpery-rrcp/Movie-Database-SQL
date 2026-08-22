@@ -75,35 +75,13 @@ def insert_popular_movie_table():
     # Insert movies into the Movie table
     for movie in movies:
         movie_id = movie["id"]
-        title = movie["title"]
-        movie_rating = movie["vote_average"]
-        release_date = movie["release_date"]
-        overview = movie["overview"]
 
-        # getting the details of each movie using the movie id
+        insert_movies(movie_id)
+
+        # getting the details of each movie to get the genre
         details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}"
         details_response = requests.get(details_url).json()
-        time_minutes = details_response["runtime"]
-        budget = details_response["budget"]
         genre_name = details_response["genres"][0]["name"] if details_response["genres"] else None
-
-        # Check if the movie already exists in the database
-        cursor.execute(
-            "SELECT COUNT(*) FROM Movie WHERE movie_id = ?;", (movie_id,)
-        )
-        count = cursor.fetchone()[0]
-
-        if count == 0:
-            print(f"Inserting: {title}")
-            # Insert the movie into the database
-            cursor.execute(
-                "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
-                (movie_id, title, movie_rating, release_date,
-                 overview, time_minutes, budget),
-            )
-            print(f"Inserted: {title}")
-        else:
-            print(f"Skipped (already exists): {title}")
 
         # Adds the genres of the movie into the Movie_Genre table
         for genre in movie["genre_ids"]:
@@ -228,11 +206,11 @@ def insert_MovieActor():
                 break
 
 
-# insert_popular_movie_table()
+insert_popular_movie_table()
 # show_movies()
 # insert_MovieActor()
-inset_movie_id = 550  # Example movie ID for testing
-insert_movies(inset_movie_id)
+# inset_movie_id = 550  # Example movie ID for testing
+# insert_movies(inset_movie_id)
 
 # Close the cursor and connection
 conn.commit()
