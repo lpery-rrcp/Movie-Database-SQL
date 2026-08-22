@@ -45,14 +45,26 @@ def insert_movies(movie_id):
     overview = details_response["overview"]
     time_minutes = details_response["runtime"]
     budget = details_response["budget"]
-    print(f"Inserting: {title}")
-    print(f"Movie ID: {movie_id}, Title: {title}, Rating: {movie_rating}, Release Date: {release_date}, Overview: {overview}, Runtime: {time_minutes}, Budget: {budget}")
+    # print(f"Inserting: {title}")
+    # print(f"Movie ID: {movie_id}, Title: {title}, Rating: {movie_rating}, Release Date: {release_date}, Overview: {overview}, Runtime: {time_minutes}, Budget: {budget}")
 
-    # Insert the movie into the database
-    # cursor.execute(
-    #     "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
-    #     (movie_id, title, movie_rating, release_date,
-    #          overview, time_minutes, budget)
+    # Check if the movie already exists in the database
+    cursor.execute(
+        "SELECT COUNT(*) FROM Movie WHERE movie_id = ?;", (movie_id,)
+    )
+    count = cursor.fetchone()[0]
+
+    if count == 0:
+        print(f"Inserting: {title}")
+        # Insert the movie into the database
+        cursor.execute(
+            "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
+            (movie_id, title, movie_rating, release_date,
+             overview, time_minutes, budget)
+        )
+        print(f"Inserted: {title}")
+    else:
+        print(f"Skipped (already exists): {title}")
 
 
 def insert_popular_movie_table():
