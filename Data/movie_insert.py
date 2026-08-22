@@ -34,6 +34,27 @@ def show_movies():
         print(f"{movie['id']}, {movie['title']}")
 
 
+def insert_movies(movie_id):
+    # getting the details of each movie using the movie id
+    details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}"
+    details_response = requests.get(details_url).json()
+    movie_id = details_response["id"]
+    title = details_response["title"]
+    movie_rating = details_response["vote_average"]
+    release_date = details_response["release_date"]
+    overview = details_response["overview"]
+    time_minutes = details_response["runtime"]
+    budget = details_response["budget"]
+    print(f"Inserting: {title}")
+    print(f"Movie ID: {movie_id}, Title: {title}, Rating: {movie_rating}, Release Date: {release_date}, Overview: {overview}, Runtime: {time_minutes}, Budget: {budget}")
+
+    # Insert the movie into the database
+    # cursor.execute(
+    #     "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
+    #     (movie_id, title, movie_rating, release_date,
+    #          overview, time_minutes, budget)
+
+
 def insert_popular_movie_table():
     URL = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
     response = requests.get(URL)
@@ -198,7 +219,8 @@ def insert_MovieActor():
 # insert_popular_movie_table()
 # show_movies()
 # insert_MovieActor()
-
+inset_movie_id = 550  # Example movie ID for testing
+insert_movies(inset_movie_id)
 
 # Close the cursor and connection
 conn.commit()
