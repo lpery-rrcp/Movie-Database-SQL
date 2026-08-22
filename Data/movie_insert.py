@@ -125,10 +125,6 @@ def insert_MovieActor():
 
         for movie in movie_credits:
             movie_id = movie["id"]
-            title = movie["title"]
-            movie_rating = movie["vote_average"]
-            release_date = movie["release_date"]
-            overview = movie["overview"]
             roles = movie.get("character", "")
 
             # Check if movie_id exists in the Movie table
@@ -143,18 +139,8 @@ def insert_MovieActor():
             if movie_exists == 0:
                 # the movie does not exist in the Movie table, so insert it
 
-                # getting the details of each movie using the movie id
-                details_url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}"
-                details_response = requests.get(details_url).json()
-                time_minutes = details_response["runtime"]
-                budget = details_response["budget"]
+                insert_movies(movie_id)
 
-                # Insert the movie into the Movie table
-                cursor.execute(
-                    "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
-                    (movie_id, title, movie_rating, release_date,
-                     overview, time_minutes, budget)
-                )
                 print(f"Inserted movie: {movie['title']} (ID: {movie_id})")
             else:
                 print(
@@ -206,9 +192,9 @@ def insert_MovieActor():
                 break
 
 
-insert_popular_movie_table()
+# insert_popular_movie_table()
 # show_movies()
-# insert_MovieActor()
+insert_MovieActor()
 # inset_movie_id = 550  # Example movie ID for testing
 # insert_movies(inset_movie_id)
 
