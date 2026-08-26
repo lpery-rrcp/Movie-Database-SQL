@@ -29,6 +29,22 @@ def show_genres():
         print(f"- {genre['name']} (ID: {genre['id']})")
 
 
+def insert_genre(genre_id, genre_name):
+    # Check if the genre into the Genre table already exists in the database
+    cursor.execute(
+        "SELECT COUNT(*) FROM Genre WHERE id = ?;", (genre_id,)
+    )
+    if cursor.fetchone()[0] == 0:
+        print(f"Inserting: {genre_name} (ID: {genre_id})")
+
+        cursor.execute(
+            "INSERT INTO Genre (id, genre_name) VALUES (?, ?);",
+            (genre_id, genre_name)
+        )
+    else:
+        print(f"Skipped (already exists): {genre_name} (ID: {genre_id})")
+
+
 def insert_genre_movie():
     URL = f"{BASE_URL}/genre/movie/list?api_key={API_KEY}"
     response = requests.get(URL)
@@ -80,7 +96,8 @@ def insert_genre_show():
 # Function calls
 # show_genres()
 # insert_genre_movie()
-insert_genre_show()
+# insert_genre_show()
+# insert_genre(100, "test")
 
 
 # Close the cursor and connection
