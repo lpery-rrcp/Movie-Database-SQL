@@ -68,24 +68,13 @@ def insert_genre_show():
         genre_name = genre["name"]
 
         # Check if the genre into the Genre table already exists in the database
-        cursor.execute(
-            "SELECT COUNT(*) FROM Genre WHERE id = ?;", (genre_id,)
-        )
-        if cursor.fetchone()[0] == 0:
-            print(f"Inserting: {genre_name} (ID: {genre_id})")
-
-            cursor.execute(
-                "INSERT INTO Genre (id, genre_name) VALUES (?, ?);",
-                (genre_id, genre_name)
-            )
-        else:
-            print(f"Skipped (already exists): {genre_name} (ID: {genre_id})")
+        insert_genre(genre_id, genre_name)
 
 
 # Function calls
 # show_genres()
 # insert_genre_movie()
-# insert_genre_show()
+insert_genre_show()
 # insert_genre(100, "test")
 
 
