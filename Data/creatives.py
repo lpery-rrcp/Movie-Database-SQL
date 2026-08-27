@@ -50,6 +50,23 @@ def show_people():
             f"- {title} (ID: {movie_id}) (Director: {director}, Writer: {writer}, Producer: {producer})")
 
 
+def insert_people(id, name, job):
+    # Check if the creative already exists in the database
+    cursor.execute(
+        "SELECT COUNT(*) FROM Creatives WHERE id = ?;", (id,)
+    )
+    count = cursor.fetchone()[0]
+
+    if count == 0:
+        cursor.execute(
+            "INSERT INTO Creatives (id, creatives_name, creatives_job) VALUES (?, ?, ?)",
+            (id, name, job),
+        )
+        print(f"Inserting: {name} (ID: {id}, Job: {job})")
+    else:
+        print(f"Skipped (already exists): {name} (ID: {id}, Job: {job})")
+
+
 def insert_people_movie():
     # insert the director, writer, and producer of the movie using the movie id. I will use the credits endpoint of the TMDB API to get this information. The credits endpoint provides information about the cast and crew of a movie, including the director, writer, and producer.
     URL = f"{BASE_URL}/movie/popular?api_key={API_KEY}"
@@ -213,7 +230,8 @@ def insert_people_show():
 # show_people()
 # insert_people_movie()
 # insert_people_show()
-insert_MovieCreatives()
+# insert_MovieCreatives()
+insert_people(100, "test", "Director")
 
 # close the cursor and connection
 conn.commit()
