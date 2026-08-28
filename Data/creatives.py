@@ -148,10 +148,7 @@ def insert_MovieCreatives():
                 )
                 count = cursor.fetchone()[0]
 
-                if count == 0:
-                    print(
-                        f"Creative ID {creative_id} does not exist in the Creatives table. Skipping.")
-                    continue
+                insert_people(creative_id, creative_name, job)
 
                 # Check if the movie-creative relationship already exists
                 cursor.execute(
@@ -213,9 +210,9 @@ def insert_people_show():
 
 # Function testing
 # show_people()
-insert_people_movie()
+# insert_people_movie()
 # insert_people_show()
-# insert_MovieCreatives()
+insert_MovieCreatives()
 # insert_people(100, "test", "Director")
 
 # close the cursor and connection
