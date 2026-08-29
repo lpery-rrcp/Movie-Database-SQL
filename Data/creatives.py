@@ -6,6 +6,7 @@ import dotenv
 from dotenv import load_dotenv
 import pyodbc
 import requests
+import movie_insert as Movie_table
 
 # TMDB connection with API key
 load_dotenv()
@@ -124,16 +125,7 @@ def insert_MovieCreatives():
             print(
                 f"Movie ID {movie_id} does not exist in the Movie table. Skipping.")
             # Add the movie to the Movie table before adding creatives
-            cursor.execute(
-                "INSERT INTO Movie (movie_id, title, movie_rating, release_date, overview, time_minutes, budget) VALUES (?, ?, ?, ?, ?, ?, ?);",
-                (movie_id, movie_title, movie_rating, release_date,
-                 movie_overview, movie_time, movie_budget)
-            )
-            print(f"Inserted movie ID {movie_id} into the Movie table.")
-            continue
-        else:
-            print(
-                f"Movie ID {movie_id} exists in the Movie table. Proceeding to insert creatives.")
+            Movie_table.insert_movies(movie_id)
 
         # Check if the creative exists in the Creative table
         for crew_member in credits["crew"]:
