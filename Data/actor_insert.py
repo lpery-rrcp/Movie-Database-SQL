@@ -4,6 +4,7 @@ import dotenv
 from dotenv import load_dotenv
 import pyodbc
 import requests
+import movie_insert as Movie_table
 
 # TMDB connection with API key
 load_dotenv()
@@ -29,34 +30,52 @@ def show_actors():
         print(f"- {actor['name']} (ID: {actor['id']})")
 
 
-def insert_actors_table():
-    URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
-    response = requests.get(URL)
-    actors = response.json()["results"]
+def insert_actor(id, actor_name):
+    cursor.execute(
+        'SELECT COUNT(*) FROM Actor WHERE id = ?;', (id)
+    )
+    count = cursor.fetchone()[0]
 
-    for actor in actors:
-        actor_id = actor["id"]
-        actor_name = actor["name"]
-
-        # Check if the actor already exists in the database
+    if count == 0:
         cursor.execute(
-            "SELECT COUNT(*) FROM Actor WHERE id = ?;", (actor_id,)
+            'INSERT INTO Actor (id, actor_name) VALUE (?, ?)',
+            (id, actor_name)
         )
-        count = cursor.fetchone()[0]
-        if count == 0:
-            cursor.execute(
-                "INSERT INTO Actor (id, actor_name) VALUES (?, ?);",
-                (actor_id, actor_name)
-            )
-            print(f"Inserting: {actor_name} (ID: {actor_id})")
-        else:
-            print(f"Skipped (already exists): {actor_name} (ID: {actor_id})")
-            continue
+        print(f"Inserting: {actor_name}")
+    else:
+        print(f"Skipped (already exists): {actor_name} (ID: {id}")
+
+
+# def insert_actors_table():
+#     URL = f"{BASE_URL}/person/popular?api_key={API_KEY}"
+#     response = requests.get(URL)
+#     actors = response.json()["results"]
+
+#     for actor in actors:
+#         actor_id = actor["id"]
+#         actor_name = actor["name"]
+
+#         # Check if the actor already exists in the database
+#         cursor.execute(
+#             "SELECT COUNT(*) FROM Actor WHERE id = ?;", (actor_id,)
+#         )
+#         count = cursor.fetchone()[0]
+#         if count == 0:
+#             cursor.execute(
+#                 "INSERT INTO Actor (id, actor_name) VALUES (?, ?);",
+#                 (actor_id, actor_name)
+#             )
+#             print(f"Inserting: {actor_name} (ID: {actor_id})")
+#         else:
+#             print(f"Skipped (already exists): {actor_name} (ID: {actor_id})")
+#             continue
 
 
 # Test functions
 # show_actors()
 # insert_actors_table()
+insert_actor(1, 'Test')
+
 # Close the cursor and connection
 conn.commit()
 

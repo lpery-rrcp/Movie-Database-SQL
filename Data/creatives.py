@@ -100,15 +100,6 @@ def insert_MovieCreatives():
 
     for movie in movies:
         movie_id = movie["id"]
-        movie_title = movie["title"]
-        movie_rating = movie.get("vote_average")
-        release_date = movie.get("release_date")
-        movie_overview = movie.get("overview")
-        # details
-        movie_details_url = f"{BASE_URL}/movie/{movie_id}?api_key={API_KEY}"
-        movie_details_response = requests.get(movie_details_url)
-        movie_time = movie_details_response.json().get("runtime")
-        movie_budget = movie_details_response.json().get("budget")
 
         URL = f"{BASE_URL}/movie/{movie_id}/credits?api_key={API_KEY}"
         response = requests.get(URL)

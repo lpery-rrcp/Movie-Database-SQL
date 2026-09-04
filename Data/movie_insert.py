@@ -194,7 +194,7 @@ def insert_MovieActor():
 
 # insert_popular_movie_table()
 # show_movies()
-insert_MovieActor()
+# insert_MovieActor()
 # inset_movie_id = 550  # Example movie ID for testing
 # insert_movies(inset_movie_id)
 
